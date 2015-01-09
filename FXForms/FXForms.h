@@ -105,6 +105,12 @@ UIKIT_EXTERN NSString *const FXFormFieldTypeImage; //image
 
 @interface FXFormField : NSObject
 
++ (void)setDefaultFont:(NSString *)fontName;
++ (void)setDefaultBoldFont:(NSString *)fontName;
++ (UIFont *)defaultFont:(CGFloat)size;
++ (UIFont *)defaultBoldFont:(CGFloat)size;
+
+
 @property (nonatomic, readonly) id<FXForm> form;
 @property (nonatomic, readonly) NSString *key;
 @property (nonatomic, readonly) NSString *type;

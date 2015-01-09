@@ -661,6 +661,31 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 
 @implementation FXFormField
 
+static NSString *__defaultFontName = nil;
+static NSString *__defaultBoldFontName = nil;
+
++ (void)setDefaultFont:(NSString *)fontName {
+    __defaultFontName = fontName;
+}
+
++ (void)setDefaultBoldFont:(NSString *)fontName {
+    __defaultBoldFontName = fontName;
+}
+
++ (UIFont *)defaultFont:(CGFloat)size {
+    if (!__defaultFontName) {
+        return [UIFont systemFontOfSize:size];
+    }
+    return [UIFont fontWithName:__defaultFontName size:size];
+}
+
++ (UIFont *)defaultBoldFont:(CGFloat)size {
+    if (!__defaultBoldFontName) {
+        return [UIFont boldSystemFontOfSize:size];
+    }
+    return [UIFont fontWithName:__defaultBoldFontName size:size];
+}
+
 + (NSArray *)fieldsWithForm:(id<FXForm>)form controller:(FXFormController *)formController
 {
     //get fields
@@ -2499,9 +2524,9 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]))
     {
-        self.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        self.textLabel.font = [FXFormField defaultBoldFont:17];
         FXFormLabelSetMinFontSize(self.textLabel, FXFormFieldMinFontSize);
-        self.detailTextLabel.font = [UIFont systemFontOfSize:17];
+        self.detailTextLabel.font = [FXFormField defaultFont:17];
         FXFormLabelSetMinFontSize(self.detailTextLabel, FXFormFieldMinFontSize);
         
         if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
@@ -2767,7 +2792,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     
     self.textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 200, 21)];
     self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin |UIViewAutoresizingFlexibleLeftMargin;
-    self.textField.font = [UIFont systemFontOfSize:self.textLabel.font.pointSize];
+    self.textField.font = [FXFormField defaultFont:self.textLabel.font.pointSize];
     self.textField.minimumFontSize = FXFormLabelMinFontSize(self.textLabel);
     self.textField.textColor = [UIColor colorWithRed:0.275f green:0.376f blue:0.522f alpha:1.000f];
     self.textField.delegate = self;
@@ -2985,7 +3010,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         textView = [[UITextView alloc] init];
-        textView.font = [UIFont systemFontOfSize:17];
+        textView.font = [FXFormField defaultFont:17];
     });
     
     textView.text = [field fieldDescription] ?: @" ";
@@ -3003,7 +3028,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 320, 21)];
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-    self.textView.font = [UIFont systemFontOfSize:17];
+    self.textView.font = [FXFormField defaultFont:17];
     self.textView.textColor = [UIColor colorWithRed:0.275f green:0.376f blue:0.522f alpha:1.000f];
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.delegate = self;
